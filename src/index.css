@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Gilroy';
+}
+ html{
+  scroll-behavior: smooth;
+ }
+html,
+body {
+  height: 100%;
+  width: 100%;
+  scroll-behavior: smooth;
+  background: #f5f9eb;
+  color: #131c20;
+}
+
+*::selection {
+  color: #f5f9eb;
+  background-color: #022431;
+}
