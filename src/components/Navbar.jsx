@@ -1,19 +1,21 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-
+import { NavLink, Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { proceduresData } from '../data/proceduresData'
 
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Blog', path: '/blog' },
   { name: 'About', path: '/about' },
-  { name: 'Services', path: '/services' },
+  { name: 'Procedure', path: '/procedure', hasDropdown: true },
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobileProcedureOpen, setIsMobileProcedureOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden border-b border-[color:rgb(128_200_138/0.35)] bg-[color:rgb(196_228_194/0.32)] backdrop-blur-xl shadow-[0_8px_30px_rgba(17,66,85,0.18)]">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[color:rgb(128_200_138/0.35)] bg-[color:rgb(196_228_194/0.32)] backdrop-blur-xl shadow-[0_8px_30px_rgba(17,66,85,0.18)]">
       <div className="pointer-events-none absolute inset-0 border-b border-[color:rgb(153_198_57/0.35)] shadow-[inset_0_1px_0_rgba(245,249,235,0.45),inset_0_-1px_0_rgba(43,164,212,0.22)]" />
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 relative z-10">
@@ -29,19 +31,60 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
             {navItems.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                className={({ isActive }) =>
-                  `group relative isolate overflow-hidden rounded-lg px-4 py-2.5 text-[#022431] hover:text-[#011923] font-mono font-semibold transition-colors duration-300 ${
-                    isActive ? 'text-[#011923]' : ''
-                  }`
-                }
+              <div 
+                key={item.name} 
+                className="group/dropdown relative"
               >
-                <span className="relative z-20">{item.name}</span>
-                <span className="absolute left-4 right-4 bottom-1.5 z-20 h-0.5 bg-[#1a627f] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" />
-                <span className="absolute inset-0 z-10 rounded-lg bg-[color:rgb(240_244_241/0.72)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </NavLink>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `group relative isolate overflow-hidden rounded-lg px-4 py-2.5 text-[#022431] hover:text-[#011923] font-mono font-semibold transition-colors duration-300 ${
+                      isActive ? 'text-[#011923]' : ''
+                    } flex items-center`
+                  }
+                >
+                  <span className="relative z-20">{item.name}</span>
+                  {item.hasDropdown && (
+                    <svg className="ml-1 w-4 h-4 transition-transform duration-300 group-hover/dropdown:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                  <span className="absolute left-4 right-4 bottom-1.5 z-20 h-0.5 bg-[#1a627f] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" />
+                </NavLink>
+
+                {/* Desktop Megamenu For Procedure */}
+                {item.hasDropdown && (
+                  <div className="absolute top-full left-0 -translate-x-1/2 pt-4 w-[400px] z-50 opacity-0 invisible translate-y-2 group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:translate-y-0 transition-all duration-300 ease-out pointer-events-none group-hover/dropdown:pointer-events-auto">
+                      <div className="bg-white/95 backdrop-blur-xl border border-[#1a627f]/10 shadow-[0_20px_40px_rgba(26,98,127,0.15)] rounded-2xl overflow-hidden p-6 relative">
+                        {/* Decorative Background Elements */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#1a627f]/5 rounded-full blur-3xl"></div>
+                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#1a627f]/5 rounded-full blur-3xl"></div>
+                        
+                        <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#e8f1f5]">
+                          <h3 className="text-lg font-bold text-[#011923] font-mono tracking-tight">Our Procedures</h3>
+
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-3 relative z-10">
+                          {proceduresData.map((proc, index) => (
+                            <Link
+                              key={proc.id}
+                              to={proc.path}
+                              className="group/item flex flex-col p-3 rounded-xl hover:bg-[#f5f9eb]/80 transition-colors duration-300"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-semibold text-[#022431] group-hover/item:text-[#1a627f] transition-colors">{proc.title}</span>
+                                <span className="text-[#1a627f] opacity-0 group-hover/item:opacity-100 transform -translate-x-2 group-hover/item:translate-x-0 transition-all duration-300">
+                                  →
+                                </span>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
@@ -73,20 +116,57 @@ export default function Navbar() {
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex flex-col h-full pt-20 px-6">
+        <div className="flex flex-col h-full pt-20 px-6 overflow-y-auto">
           {navItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                `py-5 px-4 text-xl font-mono font-medium text-[#ebf4d7] hover:text-[#f5f9eb] border-b border-[#c0d2d8] transition-colors ${
-                  isActive ? 'text-[#f5f9eb] border-[#1a627f]' : ''
-                }`
-              }
-            >
-              {item.name}
-            </NavLink>
+            <div key={item.name} className="flex flex-col border-b border-[#c0d2d8]">
+              <div className="flex items-center justify-between">
+                <NavLink
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    `py-5 text-xl font-mono font-medium text-[#ebf4d7] hover:text-[#f5f9eb] transition-colors flex-grow ${
+                      isActive ? 'text-[#f5f9eb]' : ''
+                    }`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+                {item.hasDropdown && (
+                  <button 
+                    onClick={() => setIsMobileProcedureOpen(!isMobileProcedureOpen)}
+                    className="p-4 text-[#ebf4d7] hover:bg-[#344636] rounded-lg transition-colors"
+                  >
+                    <svg className={`w-6 h-6 transition-transform duration-300 ${isMobileProcedureOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              
+              {/* Mobile Procedure Submenu */}
+              <AnimatePresence>
+                {item.hasDropdown && isMobileProcedureOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden flex flex-col pl-4 pb-4 space-y-3"
+                  >
+                    {proceduresData.map((proc) => (
+                      <Link
+                        key={proc.id}
+                        to={proc.path}
+                        onClick={() => setIsOpen(false)}
+                        className="text-lg font-medium text-[#c0d2d8] hover:text-[#f5f9eb] border-l-2 border-[#1a627f]/50 pl-4 py-2 hover:border-[#f5f9eb] transition-all"
+                      >
+                        {proc.title}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           ))}
         </div>
       </div>

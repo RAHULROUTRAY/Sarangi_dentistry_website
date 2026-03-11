@@ -74,11 +74,10 @@ export default function AboutPage() {
       <div className="relative z-10 bg-[#f5f9eb] -mt-32 pt-40 pb-32 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto space-y-32">
 
-          {/* Intro / About Us */}
           <motion.section
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 1 }}
             className="text-center"
           >
@@ -99,7 +98,7 @@ export default function AboutPage() {
           <motion.section
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-[#011923]">
@@ -129,8 +128,8 @@ export default function AboutPage() {
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: i * 0.1 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.8, delay: i * 0.1 }}
                   className="bg-white border border-[#c0d2d8] rounded-3xl p-8 hover:border-[#1a627f] hover:shadow-xl hover:shadow-[#c0d2d8] transition-all duration-500"
                 >
                   <h3 className="text-2xl font-semibold mb-5 text-[#1a627f]">{item.title}</h3>
@@ -183,10 +182,10 @@ export default function AboutPage() {
               ].map((v, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, scale: 12 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
                   className="bg-white rounded-2xl p-7 border border-[#c0d2d8] hover:border-[#1a627f] shadow-sm hover:shadow-md transition-all"
                 >
                   <div className="text-4xl font-black text-[#1a627f] mb-4">{v.num}</div>

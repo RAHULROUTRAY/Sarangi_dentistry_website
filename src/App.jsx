@@ -1,25 +1,54 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 import Navbar from './components/Navbar';
-import Hero from './components/hero';
+import Hero from './components/Hero';
 import Page2 from './components/Page2';
 import Page3 from './components/Page3';
 import Footer from './components/Footer';
 import Blog from './components/Blog';
 import BlogPost from './components/BlogPost';
 import AboutPage from './components/AboutPage';
+import Procedures from './components/Procedures';
+import ProcedureDetail from './components/ProcedureDetail';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    
+    // Temporarily disable smooth scrolling to force an instant jump
+    document.documentElement.style.scrollBehavior = 'auto';
+    
+    // Force multiple scroll triggers to guarantee it beats GSAP
+    window.scrollTo(0, 0);
+    setTimeout(() => window.scrollTo(0, 0), 10);
+
+    const stTimer = setTimeout(() => {
+      // Re-enable CSS smooth scrolling after the jump
+      document.documentElement.style.scrollBehavior = '';
+      ScrollTrigger.refresh(true);
+    }, 150);
+
+    return () => clearTimeout(stTimer);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   const mainRef = useRef(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
 
   return (
     <div className="relative min-h-screen">
+      <ScrollToTop />
       <Navbar />
 
       <main ref={mainRef} id="main" className="relative w-full">
@@ -39,6 +68,8 @@ function App() {
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<Page3 />} />
+          <Route path="/procedure" element={<Procedures />} />
+          <Route path="/procedure/:id" element={<ProcedureDetail />} />
         </Routes>
         <Footer />
       </main>

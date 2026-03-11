@@ -302,6 +302,8 @@ export default function Page3() {
 
         </div>
 
+        
+
       </div>
     </motion.div>
   );

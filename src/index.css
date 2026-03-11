@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {}
-
 * {
   margin: 0;
   padding: 0;
@@ -21,7 +20,6 @@ body {
   background: #f5f9eb;
   color: #131c20;
 }
-
 *::selection {
   color: #f5f9eb;
   background-color: #022431;
